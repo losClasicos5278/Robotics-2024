@@ -5,4 +5,4 @@
 ### Abdulbaari the Zuurman (._.) 11th Grade
 ### Giovani Santoscoy-MacPhee 11th ヾ(•ω•`)o
 ### The True Eric Diaz, little Junior
-### Aretzi 9th
+### Aretzi Alatoma 9th
