@@ -1,7 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
+//hi
 package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -14,8 +14,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.math.controller.PIDController;
-
-
+//Lines modified 18,19,75
+import frc.robot.subs.PneumaticSub;
+import frc.robot.commands.SolenoidToggle;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -71,7 +72,23 @@ public class Robot extends TimedRobot {
     
     
   }
-
+  //Figure out if Robotinit after void
+@Override
+  public void () {
+   
+    PneumaticSub.getPcm().enableCompressorDigital();
+    SmartDashboard.putData("Pneumatics", pneumaticSubsystem);
+//Is this useful or not
+    try {
+    } catch (RuntimeException e) {
+      DriverStation.reportError("Error instantiating navX-mxp" + e.getMessage() , true);
+    }
+  //Edit as needed
+    soleGreenButton.whileTrue(new SolenoidToggle(SoleColor.RED));
+    soleYellowButton.whileTrue(new SolenoidToggle(SoleColor.YELLOW));
+    soleRedButton.whileTrue(new SolenoidToggle(SoleColor.GREEN));
+    
+  }
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
