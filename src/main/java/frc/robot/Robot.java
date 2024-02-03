@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.math.controller.PIDController;
-
+import frc.robot.subs.PneumaticSub;
 
 
 /**
@@ -29,6 +29,8 @@ public class Robot extends TimedRobot {
   // private static WPI_TalonSRX leftBackMotor = new WPI_TalonSRX(4);
   // private static WPI_TalonSRX rightFrontMotor = new WPI_TalonSRX(1);
   // private static WPI_TalonSRX rightBackMotor = new WPI_TalonSRX(2);
+  // private static PneumaticSub pneumaticSubsystem = new PneumaticSub();
+    private final doublesolenoid  solenoid = new double solenoid(0,1);
   CANSparkMax rightFrontMotor;
   CANSparkMax rightBackMotor;
   CANSparkMax leftFrontMotor;
@@ -63,6 +65,12 @@ public class Robot extends TimedRobot {
     rightBackMotor = new CANSparkMax(2, MotorType.kBrushed);
     leftFrontMotor = new CANSparkMax(3, MotorType.kBrushed);
     leftBackMotor = new CANSparkMax(5, MotorType.kBrushed);
+    PneumaticSub.getPcm().enableCompressorDigital();
+    SmartDashboard.putData("Pneumatics", pneumaticSubsystem);
+    SmartDashboard.putNumber("Arm Encoder Value", armEncoder.get());
+    encoder.reset();
+    PneumaticSub
+    armEncoder.reset();
 
     leftFrontMotor.setInverted(true);
     leftBackMotor.setInverted(true);
@@ -102,6 +110,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {}
 
+
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
@@ -137,7 +146,7 @@ public class Robot extends TimedRobot {
     }
     System.out.println("teleopInit has been called.");
   }
-
+  enableCompressorDigital.stop();
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
@@ -159,7 +168,15 @@ public class Robot extends TimedRobot {
   rightBackMotor.set(rightRear);
   leftFrontMotor.set(leftFront);
   leftBackMotor.set(leftRear);
+  
+  if (controller.soleGreenButton){
+    solenoid.set(1);
+  } else if (controller(soleRedButton){
+    solenoid.set(0);
+  }
 
+  
+  }
   
 
 
