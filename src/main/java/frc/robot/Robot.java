@@ -35,6 +35,9 @@ public class Robot extends TimedRobot {
   CANSparkMax rightBackMotor;
   CANSparkMax leftFrontMotor;
   CANSparkMax leftBackMotor;
+
+  CANSparkMax leftHook;
+  CANSparkMax rightHook;
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -65,6 +68,8 @@ public class Robot extends TimedRobot {
     rightBackMotor = new CANSparkMax(2, MotorType.kBrushed);
     leftFrontMotor = new CANSparkMax(3, MotorType.kBrushed);
     leftBackMotor = new CANSparkMax(5, MotorType.kBrushed);
+    leftHook = new CANSparkMax(6, MotorType.kBrushed);
+    rightHook = new CANSparkMax(7, MotorType.kBrushed);
     PneumaticSub.getPcm().enableCompressorDigital();
     SmartDashboard.putData("Pneumatics", pneumaticSubsystem);
     SmartDashboard.putNumber("Arm Encoder Value", armEncoder.get());
@@ -74,7 +79,7 @@ public class Robot extends TimedRobot {
 
     leftFrontMotor.setInverted(true);
     leftBackMotor.setInverted(true);
-
+    leftHook.setInverted(true);
 
     
     
