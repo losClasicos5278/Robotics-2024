@@ -167,31 +167,39 @@ public class Robot extends TimedRobot {
   leftBackMotor.set(leftRear);
 
   
-// get va,ue for controller
+// get value for controller
 boolean leftBumper = controller.getLeftBumper();
 boolean rightBumper = controller.getRightBumper();
 int dpad = controller.getPOV(); 
 
-// code for climbers
-// if bumper is pressed then that climber is active
-// dpad controlls up and down for active climber
+double climberSpeed = 0.0;
 
-double leftSpeed = 0.0;
-double rightSpeed = 0.0;
+if (dpad > 135 && dpad < 225) {
+// neg speed
+  climberSpeed = -0.7;
+}
+else if (dpad != -1){
+  if (dpad > 315 || dpad < 45){
+    // pos speed 
+    climberSpeed = 0.7;
+  }
+}
+else if (dpad = -1) {
+  climberSpeed = 0.0;
+}
 
-    if (leftBumper === true && rigthBumper === true){
-        leftspeed = 0.0;
-        rightSpeed = 0.0;
-    }
-    else if (leftBumper === true){
-        leftSpeed = 0.7;
-    }
-    else if (rightBumper === true){
-        rightSpeed = 0.7
-    }
 
-    leftClimber.set(leftSpeed);
-    rightClimber.set(rightSpeed);
+  if (leftBumper === true && rigthBumper === true){
+    leftClimber.set(climberSpeed);
+     rightClimber.set(ClimberSpeed);
+  }
+  else if (leftBumper === true){
+    leftClimber.set(climberSpeed);   
+  }
+  else if (rightBumper === true){
+    rightClimber.set(climberSpeed);
+  }
+
   }
 
   @Override
