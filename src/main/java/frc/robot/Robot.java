@@ -33,16 +33,18 @@ public class Robot extends TimedRobot {
   CANSparkMax rightBackMotor;
   CANSparkMax leftFrontMotor;
   CANSparkMax leftBackMotor;
+  CANSparkMax leftClimber;
+  CANSparkMax rigthClimber;
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
   
   private static final XboxController controller = new XboxController(0);
-  JoystickButton soleGreenButton = new JoystickButton(controller, Button.kA.value);
-  JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
-  JoystickButton soleRedButton = new JoystickButton(controller, Button.kB.value);
-  JoystickButton extendArm = new JoystickButton(controller, Button.kRightBumper.value);
-  JoystickButton detractArm = new JoystickButton(controller, Button.kLeftBumper.value);
+  // JoystickButton soleGreenButton = new JoystickButton(controller, Button.kA.value);
+  // JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
+  // JoystickButton soleRedButton = new JoystickButton(controller, Button.kB.value);
+  // JoystickButton extendArm = new JoystickButton(controller, Button.kRightBumper.value);
+  // JoystickButton detractArm = new JoystickButton(controller, Button.kLeftBumper.value);
   PIDController pid;
 
   
@@ -63,6 +65,10 @@ public class Robot extends TimedRobot {
     rightBackMotor = new CANSparkMax(2, MotorType.kBrushed);
     leftFrontMotor = new CANSparkMax(3, MotorType.kBrushed);
     leftBackMotor = new CANSparkMax(5, MotorType.kBrushed);
+    leftClimber = new CANSparkMax(6, MotorType.kBrushed);
+    rightClimber = new CANSparkMax(7, MotorType.kBrushed);
+
+
 
     leftFrontMotor.setInverted(true);
     leftBackMotor.setInverted(true);
@@ -161,8 +167,31 @@ public class Robot extends TimedRobot {
   leftBackMotor.set(leftRear);
 
   
+// get va,ue for controller
+boolean leftBumper = controller.getLeftBumper();
+boolean rightBumper = controller.getRightBumper();
+int dpad = controller.getPOV(); 
 
+// code for climbers
+// if bumper is pressed then that climber is active
+// dpad controlls up and down for active climber
 
+double leftSpeed = 0.0;
+double rightSpeed = 0.0;
+
+    if (leftBumper === true && rigthBumper === true){
+        leftspeed = 0.0;
+        rightSpeed = 0.0;
+    }
+    else if (leftBumper === true){
+        leftSpeed = 0.7;
+    }
+    else if (rightBumper === true){
+        rightSpeed = 0.7
+    }
+
+    leftClimber.set(leftSpeed);
+    rightClimber.set(rightSpeed);
   }
 
   @Override
