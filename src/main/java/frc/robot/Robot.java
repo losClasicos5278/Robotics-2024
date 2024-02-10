@@ -6,7 +6,9 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-//import com.ctre.phoenix6.
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -33,6 +35,8 @@ public class Robot extends TimedRobot {
   CANSparkMax rightBackMotor;
   CANSparkMax leftFrontMotor;
   CANSparkMax leftBackMotor;
+  CANSparkMax leftClimber;
+  CANSparkMax rightClimber;
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -40,11 +44,15 @@ public class Robot extends TimedRobot {
   private static final XboxController controller = new XboxController(0);
   JoystickButton soleGreenButton = new JoystickButton(controller, Button.kA.value);
   JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
-  JoystickButton soleRedButton = new JoystickButton(controller, Button.kB.value);
-  JoystickButton extendArm = new JoystickButton(controller, Button.kRightBumper.value);
-  JoystickButton detractArm = new JoystickButton(controller, Button.kLeftBumper.value);
+  // JoystickButton soleRedButton = new JoystickButton(controller, Button.kB.value);
+  // JoystickButton extendArm = new JoystickButton(controller, Button.kRightBumper.value);
+  // JoystickButton detractArm = new JoystickButton(controller, Button.kLeftBumper.value);
   PIDController pid;
 
+  private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid (PneumaticsModuleType.CTREPCM, 4, 5);
+  private static PneumaticsControlModule pcm = new PneumaticsControlModule(0);
+  // private static DoubleSolenoid soleYellow = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
+  // private static DoubleSolenoid soleGreen = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
   
   
 
@@ -63,6 +71,10 @@ public class Robot extends TimedRobot {
     rightBackMotor = new CANSparkMax(2, MotorType.kBrushed);
     leftFrontMotor = new CANSparkMax(3, MotorType.kBrushed);
     leftBackMotor = new CANSparkMax(5, MotorType.kBrushed);
+    //leftClimber = new CANSparkMax(6, MotorType.kBrushed);
+    rightClimber = new CANSparkMax(7, MotorType.kBrushed);
+
+
 
     leftFrontMotor.setInverted(true);
     leftBackMotor.setInverted(true);
@@ -161,9 +173,51 @@ public class Robot extends TimedRobot {
   leftBackMotor.set(leftRear);
 
   
+// get value for controller
+boolean leftBumper = controller.getLeftBumper();
+boolean rightBumper = controller.getRightBumper();
+int dpad = controller.getPOV(); 
+
+double climberSpeed = 0.0;
+
+if (dpad > 135 && dpad < 225) {
+// neg speed
+  climberSpeed = -0.2;
+}
+else if (dpad != -1){
+  if (dpad > 315 || dpad < 45){
+    // pos speed 
+    climberSpeed = 0.2;
+  }
+}
+else if (dpad == -1) {
+  climberSpeed = 0.0;
+}
+
+
+  if (leftBumper == true && rightBumper == true){
+    leftClimber.set(climberSpeed);
+     rightClimber.set(climberSpeed);
+  }
+  else if (leftBumper == true){
+    leftClimber.set(climberSpeed);   
+  }
+  else if (rightBumper == true){
+    rightClimber.set(climberSpeed);
+  }
+
+      if (controller.getYButtonPressed() == true){
+        m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+      }
+      else if (controller.getAButtonPressed() == true){
+        m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse); 
+      }
+    
 
 
   }
+
+
 
   @Override
   public void testInit() {
