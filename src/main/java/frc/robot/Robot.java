@@ -162,27 +162,27 @@ public class Robot extends TimedRobot {
   double turn = controller.getRightX()*0.5;
   //double strafe = controller.getLeftX();
 
-  x = controller.getLeftX();
-  y = controller.getLeftY();
+  double x = controller.getLeftX();
+  double y = controller.getLeftY();
 
-  theta = math.atan2(y,x);
-  power = math.hypot(x,y);
+  double theta = Math.atan2(y,x);
+  double power = Math.hypot(x,y);
   
 
-sin = Math.sin(theta - math.PI/4);
-cos = Math.cos(theta - math.PI/4);
-max = math.max(math.abs(sin), math.abs(cos));
+double sin = Math.sin(theta - Math.PI/4);
+double cos = Math.cos(theta - Math.PI/4);
+double max =   Math.max(Math.abs(sin), Math.abs(cos));
 
-leftFront = power * cos/max + turn;
-rightFront =power * sin/max - turn;
-leftRear = power * sin/max + turn;
-rightRear = power * cos/max - turn;
+double leftFront = power * cos/max + turn;
+double rightFront =power * sin/max - turn;
+double leftRear = power * sin/max + turn;
+double rightRear = power * cos/max - turn;
 
-if ((power + math.abs(turn)) > 1){
-  leftFront /= power + turn;
-  rightFront /= power + turn;
-  leftRear /= power + turn;
-  rightRear /= power + turn;
+if ((power + Math.abs(turn)) > 1){
+  leftFront /= power + Math.abs(turn);
+  rightFront /= power + Math.abs(turn);
+  leftRear /= power + Math.abs(turn);
+  rightRear /= power + Math.abs(turn);
 }
 
 
