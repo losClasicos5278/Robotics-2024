@@ -40,13 +40,17 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   
   private static final XboxController controller = new XboxController(0);
-  // JoystickButton soleGreenButton = new JoystickButton(controller, Button.kA.value);
-  // JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
+  JoystickButton soleGreenButton = new JoystickButton(controller, Button.kA.value);
+  JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
   // JoystickButton soleRedButton = new JoystickButton(controller, Button.kB.value);
   // JoystickButton extendArm = new JoystickButton(controller, Button.kRightBumper.value);
   // JoystickButton detractArm = new JoystickButton(controller, Button.kLeftBumper.value);
   PIDController pid;
 
+  private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid (PneumaticsModuleType.CTREPCM 4, 5);
+  private static PneumaticsControlModule pcm = new PneumaticsControlModule(0);
+  // private static DoubleSolenoid soleYellow = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
+  // private static DoubleSolenoid soleGreen = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
   
   
 
@@ -189,16 +193,25 @@ else if (dpad = -1) {
 }
 
 
-  if (leftBumper === true && rigthBumper === true){
+  if (leftBumper == true && rigthBumper == true){
     leftClimber.set(climberSpeed);
      rightClimber.set(ClimberSpeed);
   }
-  else if (leftBumper === true){
+  else if (leftBumper == true){
     leftClimber.set(climberSpeed);   
   }
-  else if (rightBumper === true){
+  else if (rightBumper == true){
     rightClimber.set(climberSpeed);
   }
+
+      if (controller.getYButtonPressed() == true){
+        m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+      }
+      else if (contoller.getAButtonPressed() == true){
+        m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse); 
+      }
+    
+
 
   }
 
