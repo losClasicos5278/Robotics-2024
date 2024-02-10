@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
   CANSparkMax leftFrontMotor;
   CANSparkMax leftBackMotor;
   CANSparkMax leftClimber;
-  CANSparkMax rigthClimber;
+  CANSparkMax rightClimber;
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
     rightBackMotor = new CANSparkMax(2, MotorType.kBrushed);
     leftFrontMotor = new CANSparkMax(3, MotorType.kBrushed);
     leftBackMotor = new CANSparkMax(5, MotorType.kBrushed);
-    leftClimber = new CANSparkMax(6, MotorType.kBrushed);
+    //leftClimber = new CANSparkMax(6, MotorType.kBrushed);
     rightClimber = new CANSparkMax(7, MotorType.kBrushed);
 
 
@@ -176,27 +176,27 @@ double climberSpeed = 0.0;
 
 if (dpad > 135 && dpad < 225) {
 // neg speed
-  climberSpeed = -0.7;
+  climberSpeed = -0.2;
 }
 else if (dpad != -1){
   if (dpad > 315 || dpad < 45){
     // pos speed 
-    climberSpeed = 0.7;
+    climberSpeed = 0.2;
   }
 }
-else if (dpad = -1) {
+else if (dpad == -1) {
   climberSpeed = 0.0;
 }
 
 
-  if (leftBumper === true && rigthBumper === true){
+  if (leftBumper == true && rightBumper == true){
     leftClimber.set(climberSpeed);
-     rightClimber.set(ClimberSpeed);
+     rightClimber.set(climberSpeed);
   }
-  else if (leftBumper === true){
+  else if (leftBumper == true){
     leftClimber.set(climberSpeed);   
   }
-  else if (rightBumper === true){
+  else if (rightBumper == true){
     rightClimber.set(climberSpeed);
   }
 
