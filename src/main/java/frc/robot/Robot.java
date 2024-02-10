@@ -6,7 +6,9 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-//import com.ctre.phoenix6.
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -47,7 +49,7 @@ public class Robot extends TimedRobot {
   // JoystickButton detractArm = new JoystickButton(controller, Button.kLeftBumper.value);
   PIDController pid;
 
-  private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid (PneumaticsModuleType.CTREPCM 4, 5);
+  private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid (PneumaticsModuleType.CTREPCM, 4, 5);
   private static PneumaticsControlModule pcm = new PneumaticsControlModule(0);
   // private static DoubleSolenoid soleYellow = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
   // private static DoubleSolenoid soleGreen = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
@@ -198,10 +200,8 @@ else if (dpad == -1) {
      rightClimber.set(climberSpeed);
   }
   else if (leftBumper == true){
-  else if (leftBumper == true){
     leftClimber.set(climberSpeed);   
   }
-  else if (rightBumper == true){
   else if (rightBumper == true){
     rightClimber.set(climberSpeed);
   }
@@ -209,13 +209,15 @@ else if (dpad == -1) {
       if (controller.getYButtonPressed() == true){
         m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
       }
-      else if (contoller.getAButtonPressed() == true){
+      else if (controller.getAButtonPressed() == true){
         m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse); 
       }
     
 
 
   }
+
+
 
   @Override
   public void testInit() {
