@@ -158,14 +158,40 @@ public class Robot extends TimedRobot {
     // Look at old code and look at drivetrain
     //
 
-  double speed = -controller.getLeftY();
+ // double speed = -controller.getLeftY();
   double turn = controller.getRightX()*0.5;
-  double strafe = controller.getLeftX();
+  //double strafe = controller.getLeftX();
 
-  double leftFront = speed + turn + strafe;
-  double rightFront = speed - turn - strafe;
-  double leftRear = speed + turn - strafe;
-  double rightRear = speed - turn + strafe;
+  x = controller.getLeftX();
+  y = controller.getLeftY();
+
+  theta = math.atan2(y,x);
+  power = math.hypot(x,y);
+  
+
+sin = Math.sin(theta - math.PI/4);
+cos = Math.cos(theta - math.PI/4);
+max = math.max(math.abs(sin), math.abs(cos));
+
+leftFront = power * cos/max + turn;
+rightFront =power * sin/max - turn;
+leftRear = power * sin/max + turn;
+rightRear = power * cos/max - turn;
+
+if ((power + math.abs(turn)) > 1){
+  leftFront /= power + turn;
+  rightFront /= power + turn;
+  leftRear /= power + turn;
+  rightRear /= power + turn;
+}
+
+
+  // double leftFront = speed + turn + strafe;
+  // double rightFront = speed - turn - strafe;
+  // double leftRear = speed + turn - strafe;
+  // double rightRear = speed - turn + strafe;
+
+
 
   rightFrontMotor.set(rightFront);
   rightBackMotor.set(rightRear);
