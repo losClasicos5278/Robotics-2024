@@ -48,8 +48,10 @@ public class Robot extends TimedRobot {
 
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 4, 5);
   private static PneumaticsControlModule pcm = new PneumaticsControlModule(0);
-  // private static DoubleSolenoid soleYellow = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
-  // private static DoubleSolenoid soleGreen = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+  // private static DoubleSolenoid soleYellow = new
+  // DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
+  // private static DoubleSolenoid soleGreen = new
+  // DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -160,45 +162,51 @@ public class Robot extends TimedRobot {
     // System.out.println("teleopPeriodic has been called.");
     
     // method 1 for mechanum drive
-    double turn = controller.getRightX() * 0.5;
+    // double turn = controller.getRightX() * 0.5;
+    // double strafe = controller.getLeftX();
+    // double speed = controller.getLeftX();
+
+    // double leftFront = speed + turn + strafe;
+    // double rightFront = speed - turn - strafe;
+    // double leftRear = speed + turn - strafe;
+    // double rightRear = speed - turn + strafe;
+
+    // rightFrontMotor.set(rightFront);
+    // rightBackMotor.set(rightRear);
+    // leftFrontMotor.set(leftFront);
+    // leftBackMotor.set(leftRear);
+
+    // method 2 for mechanum drive
+    double speed = -controller.getLeftY();
+    double turn = controller.getRightX()*0.5;
     double strafe = controller.getLeftX();
-    double speed = controller.getLeftX();
 
-    double leftFront = speed + turn + strafe;
-    double rightFront = speed - turn - strafe;
-    double leftRear = speed + turn - strafe;
-    double rightRear = speed - turn + strafe;
+    double x = controller.getLeftX();
+    double y = -controller.getLeftY();
 
-    rightFrontMotor.set(rightFront);
+    double theta = Math.atan2(y,x);
+    double power = Math.hypot(x,y);
+
+    double sin = Math.sin(theta - Math.PI/4);
+    double cos = Math.cos(theta - Math.PI/4);
+    double max = Math.max(Math.abs(sin), Math.abs(cos));
+
+    double leftFront = power * cos/max + turn;
+    double rightFront =power * sin/max - turn;
+    double leftRear = power * sin/max + turn;
+    double rightRear = power * cos/max - turn;
+
+    if ((power + Math.abs(turn)) > 1){
+    leftFront /= power + Math.abs(turn);
+    rightFront /= power + Math.abs(turn);
+    leftRear /= power + Math.abs(turn);
+    rightRear /= power + Math.abs(turn);
+    }
+
+        rightFrontMotor.set(rightFront);
     rightBackMotor.set(rightRear);
     leftFrontMotor.set(leftFront);
     leftBackMotor.set(leftRear);
-
-    // method 2 for mechanum drive
-    // double speed = -controller.getLeftY();
-    // double turn = controller.getRightX()*0.5;
-    // //double strafe = controller.getLeftX();
-
-    // double x = controller.getLeftX();
-    // double y = -controller.getLeftY();
-
-    // double theta = Math.atan2(y,x);
-    // double power = Math.hypot(x,y);
-
-    // double sin = Math.sin(theta - Math.PI/4);
-    // double cos = Math.cos(theta - Math.PI/4);
-    // double max = Math.max(Math.abs(sin), Math.abs(cos));
-
-    // double leftFront = power * cos/max + turn;
-    // double rightFront =power * sin/max - turn;
-    // double leftRear = power * sin/max + turn;
-    // double rightRear = power * cos/max - turn;
-
-    // if ((power + Math.abs(turn)) > 1){
-    // leftFront /= power + Math.abs(turn);
-    // rightFront /= power + Math.abs(turn);
-    // leftRear /= power + Math.abs(turn);
-    // rightRear /= power + Math.abs(turn);
 
     // code for climbers
     boolean leftBumper = controller.getLeftBumper();
