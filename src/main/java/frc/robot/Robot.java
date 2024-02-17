@@ -143,15 +143,14 @@ public class Robot extends TimedRobot {
     leftFrontMotor.set(0.5);
     leftBackMotor.set(0.5); 
 
-  double time = Time.getMatchTime();
-  double 3seconds = 3;
-if (time > 3seconds){ 
-rightFrontMotor.set(0);
-rightBackMotor.set(0);
-    leftFrontMotor.set(0);
-    leftBackMotor.set(0); 
-
-}
+    double time = Time.getMatchTime();
+    double stopTime = 147;
+    if (time < stopTime){ 
+      rightFrontMotor.set(0);
+      rightBackMotor.set(0);
+      leftFrontMotor.set(0);
+      leftBackMotor.set(0); 
+    }
 
 
   }
