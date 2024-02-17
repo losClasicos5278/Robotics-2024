@@ -160,11 +160,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // System.out.println("teleopPeriodic has been called.");
-    
+
     // method 1 for mechanum drive
     // double turn = controller.getRightX() * 0.5;
     // double strafe = controller.getLeftX();
-    // double speed = controller.getLeftX();
+    // double speed = -controller.getLeftX();
 
     // double leftFront = speed + turn + strafe;
     // double rightFront = speed - turn - strafe;
@@ -177,33 +177,30 @@ public class Robot extends TimedRobot {
     // leftBackMotor.set(leftRear);
 
     // method 2 for mechanum drive
-    double speed = -controller.getLeftY();
-    double turn = controller.getRightX()*0.5;
-    double strafe = controller.getLeftX();
-
     double x = controller.getLeftX();
     double y = -controller.getLeftY();
+    double turn = controller.getRightX();
 
-    double theta = Math.atan2(y,x);
-    double power = Math.hypot(x,y);
+    double theta = Math.atan2(y, x);
+    double power = Math.hypot(x, y);
 
-    double sin = Math.sin(theta - Math.PI/4);
-    double cos = Math.cos(theta - Math.PI/4);
+    double sin = Math.sin(theta - Math.PI / 4);
+    double cos = Math.cos(theta - Math.PI / 4);
     double max = Math.max(Math.abs(sin), Math.abs(cos));
 
-    double leftFront = power * cos/max + turn;
-    double rightFront =power * sin/max - turn;
-    double leftRear = power * sin/max + turn;
-    double rightRear = power * cos/max - turn;
+    double leftFront = power * cos / max + turn;
+    double rightFront = power * sin / max - turn;
+    double leftRear = power * sin / max + turn;
+    double rightRear = power * cos / max - turn;
 
-    if ((power + Math.abs(turn)) > 1){
-    leftFront /= power + Math.abs(turn);
-    rightFront /= power + Math.abs(turn);
-    leftRear /= power + Math.abs(turn);
-    rightRear /= power + Math.abs(turn);
+    if ((power + Math.abs(turn)) > 1) {
+      leftFront /= power + Math.abs(turn);
+      rightFront /= power + Math.abs(turn);
+      leftRear /= power + Math.abs(turn);
+      rightRear /= power + Math.abs(turn);
     }
 
-        rightFrontMotor.set(rightFront);
+    rightFrontMotor.set(rightFront);
     rightBackMotor.set(rightRear);
     leftFrontMotor.set(leftFront);
     leftBackMotor.set(leftRear);
@@ -236,7 +233,6 @@ public class Robot extends TimedRobot {
       rightClimber.set(climberSpeed);
     }
 
-
     // code for piston
     if (controller.getYButtonPressed() == true) {
       m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
@@ -249,7 +245,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
+    // CommandScheduler.getInstance().cancelAll();
     System.out.println("testInit has been called.");
 
   }
