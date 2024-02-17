@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
-
+import.edu.wpi.first.wpilibj.Timer;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to
@@ -142,7 +142,17 @@ public class Robot extends TimedRobot {
     leftFrontMotor.set(0.5);
     leftBackMotor.set(0.5);
 
-  }
+    double time = Time.getWatchTime();
+    double 3seconds = 3;
+    if (time > 3seconds){
+ rightFrontMotor.set(0);
+    rightBackMotor.set(0);
+    leftFrontMotor.set(0);
+    leftBackMotor.set(0);
+
+    }
+  
+    }
 
   @Override
   public void teleopInit() {
