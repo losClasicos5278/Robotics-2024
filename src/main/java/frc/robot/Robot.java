@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -140,7 +141,18 @@ public class Robot extends TimedRobot {
     rightFrontMotor.set(0.5);
     rightBackMotor.set(0.5);
     leftFrontMotor.set(0.5);
-    leftBackMotor.set(0.5);
+    leftBackMotor.set(0.5); 
+
+  double time = Time.getMatchTime();
+  double 3seconds = 3;
+if (time > 3seconds){ 
+rightFrontMotor.set(0);
+rightBackMotor.set(0);
+    leftFrontMotor.set(0);
+    leftBackMotor.set(0); 
+
+}
+
 
   }
 
