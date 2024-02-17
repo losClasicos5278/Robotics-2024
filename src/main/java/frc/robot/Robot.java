@@ -138,19 +138,19 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     System.out.println("autonomousPeriodic has been called.");
-    rightFrontMotor.set(0.5);
-    rightBackMotor.set(0.5);
-    leftFrontMotor.set(0.5);
-    leftBackMotor.set(0.5); 
+    rightFrontMotor.set(0.2);
+    rightBackMotor.set(0.2);
+    leftFrontMotor.set(0.2);
+    leftBackMotor.set(0.2); 
 
-    double time = Time.getMatchTime();
+    double time = Timer.getMatchTime();
     double stopTime = 147;
-    if (time < stopTime){ 
-      rightFrontMotor.set(0);
-      rightBackMotor.set(0);
-      leftFrontMotor.set(0);
-      leftBackMotor.set(0); 
-    }
+    // if (time < stopTime){ 
+    //   rightFrontMotor.set(0);
+    //   rightBackMotor.set(0);
+    //   leftFrontMotor.set(0);
+    //   leftBackMotor.set(0); 
+    // }
 
 
   }
