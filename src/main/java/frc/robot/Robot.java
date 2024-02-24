@@ -175,7 +175,7 @@ public class Robot extends TimedRobot {
     // method 1 for mechanum drive
     // double turn = controller.getRightX() * 0.5;
     // double strafe = controller.getLeftX();
-    // double speed = -controller.getLeftX();
+    // double speed = -controller.getLeftY();
 
     // double leftFront = speed + turn + strafe;
     // double rightFront = speed - turn - strafe;
