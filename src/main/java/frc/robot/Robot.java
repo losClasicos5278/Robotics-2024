@@ -172,21 +172,32 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // System.out.println("teleopPeriodic has been called.");
 
-    // method 1 for mechanum drive
-    // double turn = controller.getRightX() * 0.5;
-    // double strafe = controller.getLeftX();
-    // double speed = -controller.getLeftY();
 
-    // double leftFront = speed + turn + strafe;
-    // double rightFront = speed - turn - strafe;
-    // double leftRear = speed + turn - strafe;
-    // double rightRear = speed - turn + strafe;
+    driveMethod2();
+    activateClimbers();
+    activatePistons();
+    
 
-    // rightFrontMotor.set(rightFront);
-    // rightBackMotor.set(rightRear);
-    // leftFrontMotor.set(leftFront);
-    // leftBackMotor.set(leftRear);
+  }
 
+  public void driveMethod1(){
+    // method 1 for mecanum wheels
+    double turn = controller.getRightX() * 0.5;
+    double strafe = controller.getLeftX();
+    double speed = -controller.getLeftY();
+
+    double leftFront = speed + turn + strafe;
+    double rightFront = speed - turn - strafe;
+    double leftRear = speed + turn - strafe;
+    double rightRear = speed - turn + strafe;
+
+    rightFrontMotor.set(rightFront);
+    rightBackMotor.set(rightRear);
+    leftFrontMotor.set(leftFront);
+    leftBackMotor.set(leftRear);
+  }
+
+  public void driveMethod2() {
     // method 2 for mechanum drive
     double x = controller.getLeftX();
     double y = -controller.getLeftY();
@@ -215,8 +226,10 @@ public class Robot extends TimedRobot {
     rightBackMotor.set(rightRear);
     leftFrontMotor.set(leftFront);
     leftBackMotor.set(leftRear);
+  }
 
-    // code for climbers
+  public void activateClimbers(){
+    //climber code
     boolean leftBumper = controller.getLeftBumper();
     boolean rightBumper = controller.getRightBumper();
     int dpad = controller.getPOV();
@@ -243,16 +256,17 @@ public class Robot extends TimedRobot {
     } else if (rightBumper == true) {
       rightClimber.set(climberSpeed);
     }
-
-    // code for piston
-    if (controller.getYButtonPressed() == true) {
-      m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
-    } else if (controller.getAButtonPressed() == true) {
-      m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
-    }
-
   }
 
+public void activatePistons(){
+  // code for piston
+  if (controller.getYButtonPressed() == true) {
+    m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+  } else if (controller.getAButtonPressed() == true) {
+    m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+  }
+  }
+  
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
