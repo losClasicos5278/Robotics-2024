@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,6 +35,7 @@ public class Robot extends TimedRobot {
   CANSparkMax leftBackMotor;
   CANSparkMax leftClimber;
   CANSparkMax rightClimber;
+  double startTime;
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -125,6 +125,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    startTime = System.nanoTime();
     System.out.println("autonomousInit has been called.");
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -143,9 +144,8 @@ public class Robot extends TimedRobot {
     leftFrontMotor.set(0.2);
     leftBackMotor.set(0.2); 
 
-    double time = Timer.getMatchTime();
-    double stopTime = 147;
-    if (time < stopTime){ 
+    double elapseTime = System.nanoTime() - startTime ;
+    if (elapseTime > 3 ){ 
       rightFrontMotor.set(0);
       rightBackMotor.set(0);
       leftFrontMotor.set(0);
