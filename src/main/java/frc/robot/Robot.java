@@ -125,7 +125,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    startTime = System.nanoTime();
+    startTime = System.currentTimeMillis();
     System.out.println("autonomousInit has been called.");
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -142,10 +142,10 @@ public class Robot extends TimedRobot {
     rightFrontMotor.set(0.2);
     rightBackMotor.set(0.2);
     leftFrontMotor.set(0.2);
-    leftBackMotor.set(0.2); 
+    leftBackMotor.set(0.2);
 
-    double elapseTime = System.nanoTime() - startTime ;
-    if (elapseTime > 3 ){ 
+    double elapseTime = System.currentTimeMillis() - startTime ;
+    if (elapseTime > 3000 ){ 
       rightFrontMotor.set(0);
       rightBackMotor.set(0);
       leftFrontMotor.set(0);
@@ -238,11 +238,11 @@ public class Robot extends TimedRobot {
 
     if (dpad > 135 && dpad < 225) {
       // neg speed
-      climberSpeed = -0.2;
+      climberSpeed = -1;
     } else if (dpad != -1) {
       if (dpad > 315 || dpad < 45) {
         // pos speed
-        climberSpeed = 0.2;
+        climberSpeed = 1;
       }
     } else if (dpad == -1) {
       climberSpeed = 0.0;
