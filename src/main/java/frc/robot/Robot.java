@@ -139,10 +139,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     System.out.println("autonomousPeriodic has been called.");
-    rightFrontMotor.set(0.2);
-    rightBackMotor.set(0.2);
-    leftFrontMotor.set(0.2);
-    leftBackMotor.set(0.2);
+    rightFrontMotor.set(0.4);
+    rightBackMotor.set(0.4);
+    leftFrontMotor.set(0.4);
+    leftBackMotor.set(0.4);
 
     double elapseTime = System.currentTimeMillis() - startTime ;
     if (elapseTime > 3000 ){ 
