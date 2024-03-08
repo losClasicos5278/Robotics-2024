@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     System.out.println("disabledInit has been called.");
-
+    System.out.println("test")
   }
 
   @Override
