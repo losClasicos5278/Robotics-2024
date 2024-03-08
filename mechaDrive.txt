@@ -1,0 +1,97 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+
+@TeleOp(name = "Jason2_Main_Jimmy (Blocks to Java)")
+public class Jason2_Main_Jimmy extends LinearOpMode {
+
+  private DcMotor FL2;
+  private DcMotor FR3;
+  private DcMotor BL0;
+  private DcMotor BR1;
+  private ColorSensor HardeesColor;
+  private Servo JimmysServo;
+  private TouchSensor JimmyTouch;
+  private DcMotor Jimmy;
+
+  int Blue;
+  int Green;
+  float RightStickY;
+
+  /**
+   * This function is executed when this Op Mode is selected from the Driver Station.
+   */
+  @Override
+  public void runOpMode() {
+    FL2 = hardwareMap.get(DcMotor.class, "FL 2");
+    FR3 = hardwareMap.get(DcMotor.class, "FR 3");
+    BL0 = hardwareMap.get(DcMotor.class, "BL 0");
+    BR1 = hardwareMap.get(DcMotor.class, "BR 1");
+    HardeesColor = hardwareMap.get(ColorSensor.class, "Hardee's Color");
+    JimmysServo = hardwareMap.get(Servo.class, "Jimmy's Servo");
+    JimmyTouch = hardwareMap.get(TouchSensor.class, "Jimmy Touch");
+    Jimmy = hardwareMap.get(DcMotor.class, "Jimmy");
+
+    waitForStart();
+    if (opModeIsActive()) {
+      FL2.setDirection(DcMotorSimple.Direction.REVERSE);
+      FR3.setDirection(DcMotorSimple.Direction.FORWARD);
+      BL0.setDirection(DcMotorSimple.Direction.REVERSE);
+      BR1.setDirection(DcMotorSimple.Direction.FORWARD);
+      while (opModeIsActive()) {
+        if (gamepad1.left_stick_x != 0 || gamepad1.left_stick_y != 0 || gamepad1.left_trigger != 0 || gamepad1.right_trigger != 0) {
+          FL2.setPower(((gamepad1.left_stick_y * -1 + gamepad1.left_stick_x) - gamepad1.left_trigger) + gamepad1.right_trigger);
+          FR3.setPower(((gamepad1.left_stick_y * -1 - gamepad1.left_stick_x) + gamepad1.left_trigger) - gamepad1.right_trigger);
+          BL0.setPower(((gamepad1.left_stick_y * -1 - gamepad1.left_stick_x) - gamepad1.left_trigger) + gamepad1.right_trigger);
+          BR1.setPower((gamepad1.left_stick_y * -1 + gamepad1.left_stick_x + gamepad1.left_trigger) - gamepad1.right_trigger);
+        } else {
+          FL2.setPower(0);
+          FR3.setPower(0);
+          BL0.setPower(0);
+          BR1.setPower(0);
+        }
+        RightStickY = gamepad1.right_stick_y;
+        Move_Arm();
+        Blue = HardeesColor.blue();
+        Green = HardeesColor.green();
+        Move_Claw();
+        Open_Claw();
+      }
+    }
+  }
+
+  /**
+   * Describe this function...
+   */
+  private void Open_Claw() {
+    if (gamepad1.b) {
+      JimmysServo.setPosition(0.5);
+    }
+  }
+
+  /**
+   * Describe this function...
+   */
+  private void Move_Arm() {
+    if (RightStickY > 0 && JimmyTouch.isPressed()) {
+      Jimmy.setPower(0);
+    } else {
+      Jimmy.setPower(RightStickY / 4);
+    }
+  }
+
+  /**
+   * Describe this function...
+   */
+  private void Move_Claw() {
+    if (Blue > 127 && Blue > Green || gamepad1.a) {
+      JimmysServo.setPosition(-0.65);
+    }
+  }
+}
