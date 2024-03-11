@@ -41,8 +41,16 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
 
   private static final XboxController controller = new XboxController(0);
-  JoystickButton soleGreenButton = new JoystickButton(controller, Button.kA.value);
-  JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
+private static final XboxController actionsController = new XboxController(1);
+
+  // JoystickButton soleGreenButton = new JoystickButton(controller, Button.kA.value);
+  // JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
+
+// moves dumper up
+    JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
+    //moves dumper down
+   JoystickButton soleGreenButton = new JoystickButton(actionsController, Button.kA.value);
+
   // JoystickButton soleRedButton = new JoystickButton(controller,
   // Button.kB.value);
   PIDController pid;
@@ -230,9 +238,9 @@ public class Robot extends TimedRobot {
 
   public void activateClimbers(){
     //climber code
-    boolean leftBumper = controller.getLeftBumper();
-    boolean rightBumper = controller.getRightBumper();
-    int dpad = controller.getPOV();
+    boolean leftBumper = actionsController.getLeftBumper();
+    boolean rightBumper = actionsController.getRightBumper();
+    int dpad = actionsController.getPOV();
 
     double climberSpeed = 0.0;
 
@@ -260,9 +268,9 @@ public class Robot extends TimedRobot {
 
 public void activatePistons(){
   // code for piston
-  if (controller.getYButtonPressed() == true) {
+  if (actionsController.getYButtonPressed() == true) {
     m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
-  } else if (controller.getAButtonPressed() == true) {
+  } else if (actionsController.getAButtonPressed() == true) {
     m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
   }
