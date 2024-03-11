@@ -144,14 +144,13 @@ public class Robot extends TimedRobot {
     leftFrontMotor.set(0.4);
     leftBackMotor.set(0.4);
 
-    double elapseTime = System.currentTimeMillis() - startTime ;
-    if (elapseTime > 3000 ){ 
+    double elapseTime = System.currentTimeMillis() - startTime;
+    if (elapseTime > 3000) {
       rightFrontMotor.set(0);
       rightBackMotor.set(0);
       leftFrontMotor.set(0);
-      leftBackMotor.set(0); 
+      leftBackMotor.set(0);
     }
-
 
   }
 
@@ -172,15 +171,13 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // System.out.println("teleopPeriodic has been called.");
 
-
     driveMethod2();
     activateClimbers();
     activatePistons();
-    
 
   }
 
-  public void driveMethod1(){
+  public void driveMethod1() {
     // method 1 for mecanum wheels
     double turn = controller.getRightX() * 0.5;
     double strafe = controller.getLeftX();
@@ -228,8 +225,8 @@ public class Robot extends TimedRobot {
     leftBackMotor.set(leftRear);
   }
 
-  public void activateClimbers(){
-    //climber code
+  public void activateClimbers() {
+    // climber code
     boolean leftBumper = controller.getLeftBumper();
     boolean rightBumper = controller.getRightBumper();
     int dpad = controller.getPOV();
@@ -258,15 +255,15 @@ public class Robot extends TimedRobot {
     }
   }
 
-public void activatePistons(){
-  // code for piston
-  if (controller.getYButtonPressed() == true) {
-    m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
-  } else if (controller.getAButtonPressed() == true) {
-    m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+  public void activatePistons() {
+    // code for piston
+    if (controller.getYButtonPressed() == true) {
+      m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+    } else if (controller.getAButtonPressed() == true) {
+      m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+    }
   }
-  }
-  
+
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
