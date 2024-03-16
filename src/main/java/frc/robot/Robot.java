@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
 
@@ -41,15 +42,17 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
 
   private static final XboxController controller = new XboxController(0);
-private static final XboxController actionsController = new XboxController(1);
+  private static final XboxController actionsController = new XboxController(1);
 
-  // JoystickButton soleGreenButton = new JoystickButton(controller, Button.kA.value);
-  // JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
+  // JoystickButton soleGreenButton = new JoystickButton(controller,
+  // Button.kA.value);
+  // JoystickButton soleYellowButton = new JoystickButton(controller,
+  // Button.kY.value);
 
-// moves dumper up
-    JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
-    //moves dumper down
-   JoystickButton soleGreenButton = new JoystickButton(actionsController, Button.kA.value);
+  // moves dumper up
+  JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
+  // moves dumper down
+  JoystickButton soleGreenButton = new JoystickButton(actionsController, Button.kA.value);
 
   // JoystickButton soleRedButton = new JoystickButton(controller,
   // Button.kB.value);
@@ -62,6 +65,8 @@ private static final XboxController actionsController = new XboxController(1);
   // private static DoubleSolenoid soleGreen = new
   // DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
 
+  private Spark lights = new Spark(0);
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -69,9 +74,6 @@ private static final XboxController actionsController = new XboxController(1);
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer. This will perform all our button bindings,
-    // and put our
-    // autonomous chooser on the dashboard.
     CameraServer.startAutomaticCapture();
 
     m_robotContainer = new RobotContainer();
@@ -83,11 +85,10 @@ private static final XboxController actionsController = new XboxController(1);
     rightFrontMotor = new CANSparkMax(4, MotorType.kBrushed);
     leftBackMotor = new CANSparkMax(5, MotorType.kBrushed);
     leftClimber = new CANSparkMax(6, MotorType.kBrushed);
-    rightClimber = new CANSparkMax(7, MotorType.kBrushed);
+    rightClimber = new CANSparkMax(7, MotorType.kBrushless);
 
     leftFrontMotor.setInverted(true);
-    leftBackMotor.setInverted(true);
-
+    leftBackMotor.setInverted(true);    
   }
 
   /**
@@ -109,9 +110,6 @@ private static final XboxController actionsController = new XboxController(1);
     // and running subsystem periodic() methods. This must be called from the
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
-    int myInt = 1;
-
-    myInt = 2;
     CommandScheduler.getInstance().run();
     // System.out.println("robotPeriodic has been called.");
   }
@@ -146,19 +144,20 @@ private static final XboxController actionsController = new XboxController(1);
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    System.out.println("autonomousPeriodic has been called.");
-    rightFrontMotor.set(0.4);
-    rightBackMotor.set(0.4);
-    leftFrontMotor.set(0.4);
-    leftBackMotor.set(0.4);
+    // rightFrontMotor.set(0.4);
+    // rightBackMotor.set(0.4);
+    // leftFrontMotor.set(0.4);
+    // leftBackMotor.set(0.4);
 
-    double elapseTime = System.currentTimeMillis() - startTime;
-    if (elapseTime > 3000) {
-      rightFrontMotor.set(0);
-      rightBackMotor.set(0);
-      leftFrontMotor.set(0);
-      leftBackMotor.set(0);
-    }
+    // double elapseTime = System.currentTimeMillis() - startTime;
+    // if (elapseTime > 3000) {
+    // rightFrontMotor.set(0);
+    // rightBackMotor.set(0);
+    // leftFrontMotor.set(0);
+    // leftBackMotor.set(0);
+    // }
+
+    lights.set(-0.99);
 
   }
 
@@ -177,12 +176,10 @@ private static final XboxController actionsController = new XboxController(1);
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // System.out.println("teleopPeriodic has been called.");
-
     driveMethod2();
     activateClimbers();
     activatePistons();
-
+    lights.set(-0.99);
   }
 
   public void driveMethod1() {
