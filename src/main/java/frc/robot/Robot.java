@@ -171,60 +171,67 @@ public class Robot extends TimedRobot {
     Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Red);
     System.out.println(alliance);
     // int location = DriverStation.getLocation().orElse(0);
-    if (alliance == DriverStation.Alliance.Red) {
-      lights.set(-0.61);
 
-      if (elapseTime <= 2150) {
-        rightFrontMotor.set(0.2);
-        rightBackMotor.set(0.2);
-        leftFrontMotor.set(0.2);
-        leftBackMotor.set(0.2);
-      } else if (elapseTime > 3000 && elapseTime < 4770) {
+    int driveForwardEndTime = 2150;
+    int turnEndTime = 1770 + driveForwardEndTime;
+    int secondDriveForwardEndTime = turnEndTime + 1000;
+    lights.set(-0.61);
+
+    if (elapseTime <= driveForwardEndTime) {
+      rightFrontMotor.set(0.2);
+      rightBackMotor.set(0.2);
+      leftFrontMotor.set(0.2);
+      leftBackMotor.set(0.2);
+    } else if (elapseTime > driveForwardEndTime && elapseTime < turnEndTime) {
+      if (alliance == DriverStation.Alliance.Red) {
         rightFrontMotor.set(0.2);
         rightBackMotor.set(0.2);
         leftFrontMotor.set(-0.2);
         leftBackMotor.set(-0.2);
-      } else if (elapseTime > 4780 && elapseTime < 5780) {
-        rightFrontMotor.set(0.2);
-        rightBackMotor.set(0.2);
+      } else {
+        rightFrontMotor.set(-0.2);
+        rightBackMotor.set(-0.2);
         leftFrontMotor.set(0.2);
         leftBackMotor.set(0.2);
-      } else {
-        rightFrontMotor.set(0.0);
-        rightBackMotor.set(0.0);
-        leftFrontMotor.set(0.0);
-        leftBackMotor.set(0.0);
       }
+    } else if (elapseTime > turnEndTime && elapseTime < secondDriveForwardEndTime) {
+      rightFrontMotor.set(0.2);
+      rightBackMotor.set(0.2);
+      leftFrontMotor.set(0.2);
+      leftBackMotor.set(0.2);
+    } else {
+      rightFrontMotor.set(0.0);
+      rightBackMotor.set(0.0);
+      leftFrontMotor.set(0.0);
+      leftBackMotor.set(0.0);
     }
+
   }
-//Strafing code
-    // if (alliance == DriverStation.Alliance.Blue) {
-    //   lights.set(-0.81);
+  // Strafing code
+  // if (alliance == DriverStation.Alliance.Blue) {
+  // lights.set(-0.81);
 
-    //   rightFrontMotor.set(0.4);
-    //   rightBackMotor.set(-0.4);
-    //   leftFrontMotor.set(-0.4);
-    //   leftBackMotor.set(0.4);
+  // rightFrontMotor.set(0.4);
+  // rightBackMotor.set(-0.4);
+  // leftFrontMotor.set(-0.4);
+  // leftBackMotor.set(0.4);
 
-    //   if (elapseTime > 3000) {
-    //     rightFrontMotor.set(0);
-    //     rightBackMotor.set(0);
-    //     leftFrontMotor.set(0);
-    //     leftBackMotor.set(0);
-    //   }
+  // if (elapseTime > 3000) {
+  // rightFrontMotor.set(0);
+  // rightBackMotor.set(0);
+  // leftFrontMotor.set(0);
+  // leftBackMotor.set(0);
+  // }
 
-    
-
-    // rightFrontMotor.set(0.2);
-    // rightBackMotor.set(0.2);
-    // leftFrontMotor.set(0.2);
-    // leftBackMotor.set(0.2);
-    // Timer.delay(3);
-    // rightFrontMotor.set(0);
-    // rightBackMotor.set(0);
-    // leftFrontMotor.set(0);
-    // leftBackMotor.set(0);
-  
+  // rightFrontMotor.set(0.2);
+  // rightBackMotor.set(0.2);
+  // leftFrontMotor.set(0.2);
+  // leftBackMotor.set(0.2);
+  // Timer.delay(3);
+  // rightFrontMotor.set(0);
+  // rightBackMotor.set(0);
+  // leftFrontMotor.set(0);
+  // leftBackMotor.set(0);
 
   @Override
   public void teleopInit() {
