@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -38,7 +39,10 @@ public class Robot extends TimedRobot {
   CANSparkMax leftBackMotor;
   CANSparkMax leftClimber;
   CANSparkMax rightClimber;
+  RelativeEncoder rightEncoder;
   double startTime;
+  boolean alreadyFired;
+  boolean retractedDumper;
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -86,11 +90,13 @@ public class Robot extends TimedRobot {
     leftFrontMotor = new CANSparkMax(3, MotorType.kBrushed);
     rightFrontMotor = new CANSparkMax(4, MotorType.kBrushed);
     leftBackMotor = new CANSparkMax(5, MotorType.kBrushed);
-    leftClimber = new CANSparkMax(6, MotorType.kBrushed);
+    leftClimber = new CANSparkMax(6, MotorType.kBrushless);
     rightClimber = new CANSparkMax(7, MotorType.kBrushless);
 
     leftFrontMotor.setInverted(true);
     leftBackMotor.setInverted(true);
+
+    rightEncoder = rightClimber.getEncoder();
   }
 
   /**
@@ -134,6 +140,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     startTime = System.currentTimeMillis();
+    alreadyFired = false;
     System.out.println("autonomousInit has been called.");
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -172,15 +179,17 @@ public class Robot extends TimedRobot {
     System.out.println(alliance);
     // int location = DriverStation.getLocation().orElse(0);
 
-    autoQuickDrive(elapseTime, alliance, 0);
-    //autoLongDrive(elapseTime, alliance, 1000);
+    // autoQuickDrive(elapseTime, alliance, 0);
+    autoLongDrive(elapseTime, alliance, 8000);
   }
 
-  public void autoQuickDrive(double elapseTime, Alliance alliance, int delayTime){
+  public void autoQuickDrive(double elapseTime, Alliance alliance, int delayTime) {
     int driveStartTime = delayTime;
     int driveForwardEndTime = 2150 + driveStartTime;
     int turnEndTime = 1770 + driveForwardEndTime;
     int secondDriveForwardEndTime = turnEndTime + 1000;
+    int scoreEndTime = secondDriveForwardEndTime + 3000;
+    int thirdDriveForwardDriveEndTime = scoreEndTime + 2000;
     lights.set(-0.61);
 
     if (elapseTime > driveStartTime && elapseTime <= driveForwardEndTime) {
@@ -205,6 +214,16 @@ public class Robot extends TimedRobot {
       rightBackMotor.set(0.2);
       leftFrontMotor.set(0.2);
       leftBackMotor.set(0.2);
+    } else if (elapseTime > secondDriveForwardEndTime && elapseTime < scoreEndTime) {
+      if (!alreadyFired) {
+        m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+        alreadyFired = true;
+      }
+    } else if (elapseTime > scoreEndTime && elapseTime < thirdDriveForwardDriveEndTime) {
+      if (!retractedDumper) {
+        m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+        retractedDumper = true;
+      }
     } else {
       rightFrontMotor.set(0.0);
       rightBackMotor.set(0.0);
@@ -213,17 +232,40 @@ public class Robot extends TimedRobot {
     }
   }
 
-  public void autoLongDrive(double elapseTime, Alliance alliance, int delayTime){
-    autoQuickDrive(elapseTime,alliance,delayTime);
+  public void autoLongDrive(double elapseTime, Alliance alliance, int delayTime) {
+    autoQuickDrive(elapseTime, alliance, delayTime);
 
   }
+
+  // public void strafeRed(double elapseTime, Alliance alliance, int delayTime) {
+  // int driveStartTime = delayTime;
+  // int strafeEndTime = 2000 + driveStartTime;
+  // int driveForwardEndTime = strafeEndTime + 1000;
+  // int
+
+  // if (elapseTime > driveStartTime && elapseTime < strafeEndTime) {
+  // rightFrontMotor.set(-0.4);
+  // rightBackMotor.set(0.4);
+  // leftFrontMotor.set(0.4);
+  // leftBackMotor.set(-0.4);
+  // else if (elapseTime > && elapseTime < ) {
+  // rightFrontMotor.set(speed:0.4);
+  // rightBackMotor.set(speed:0.2);
+  // leftFrontMotor.set(0.4);
+  // leftBackMotor.set(0.2);
+  // }
+  // else if (){
+
+  // }
+  // }
+
   // Strafing code
   // if (alliance == DriverStation.Alliance.Blue) {
   // lights.set(-0.81);
 
   // rightFrontMotor.set(0.4);
   // rightBackMotor.set(-0.4);
-  // leftFrontMotor.set(-0.4);, 
+  // leftFrontMotor.set(-0.4);,
   // leftBackMotor.set(0.4);
 
   // if (elapseTime > 3000) {
@@ -232,16 +274,6 @@ public class Robot extends TimedRobot {
   // leftFrontMotor.set(0);
   // leftBackMotor.set(0);
   // }
-
-  // rightFrontMotor.set(0.2);
-  // rightBackMotor.set(0.2);
-  // leftFrontMotor.set(0.2);
-  // leftBackMotor.set(0.2);
-  // Timer.delay(3);
-  // rightFrontMotor.set(0);
-  // rightBackMotor.set(0);
-  // leftFrontMotor.set(0);
-  // leftBackMotor.set(0);
 
   @Override
   public void teleopInit() {
@@ -338,8 +370,10 @@ public class Robot extends TimedRobot {
     } else if (leftBumper == true) {
       leftClimber.set(climberSpeed);
     } else if (rightBumper == true) {
-      rightClimber.set(climberSpeed);
+        rightClimber.set(climberSpeed);
     }
+
+    System.out.println(rightEncoder.getPosition());
   }
 
   public void activatePistons() {
