@@ -172,12 +172,18 @@ public class Robot extends TimedRobot {
     System.out.println(alliance);
     // int location = DriverStation.getLocation().orElse(0);
 
-    int driveForwardEndTime = 2150;
+    autoQuickDrive(elapseTime, alliance, 0);
+    //autoLongDrive(elapseTime, alliance, 1000);
+  }
+
+  public void autoQuickDrive(double elapseTime, Alliance alliance, int delayTime){
+    int driveStartTime = delayTime;
+    int driveForwardEndTime = 2150 + driveStartTime;
     int turnEndTime = 1770 + driveForwardEndTime;
     int secondDriveForwardEndTime = turnEndTime + 1000;
     lights.set(-0.61);
 
-    if (elapseTime <= driveForwardEndTime) {
+    if (elapseTime > driveStartTime && elapseTime <= driveForwardEndTime) {
       rightFrontMotor.set(0.2);
       rightBackMotor.set(0.2);
       leftFrontMotor.set(0.2);
@@ -205,6 +211,10 @@ public class Robot extends TimedRobot {
       leftFrontMotor.set(0.0);
       leftBackMotor.set(0.0);
     }
+  }
+
+  public void autoLongDrive(double elapseTime, Alliance alliance, int delayTime){
+    autoQuickDrive(elapseTime,alliance,delayTime);
 
   }
   // Strafing code
@@ -213,7 +223,7 @@ public class Robot extends TimedRobot {
 
   // rightFrontMotor.set(0.4);
   // rightBackMotor.set(-0.4);
-  // leftFrontMotor.set(-0.4);
+  // leftFrontMotor.set(-0.4);, 
   // leftBackMotor.set(0.4);
 
   // if (elapseTime > 3000) {
