@@ -15,10 +15,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -88,7 +90,7 @@ public class Robot extends TimedRobot {
     rightClimber = new CANSparkMax(7, MotorType.kBrushless);
 
     leftFrontMotor.setInverted(true);
-    leftBackMotor.setInverted(true);    
+    leftBackMotor.setInverted(true);
   }
 
   /**
@@ -144,10 +146,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    // rightFrontMotor.set(0.4);
-    // rightBackMotor.set(0.4);
-    // leftFrontMotor.set(0.4);
-    // leftBackMotor.set(0.4);
+    // rightFrontMotor.set(0.2);
+    // rightBackMotor.set(0.2);
+    // leftFrontMotor.set(0.2);
+    // leftBackMotor.set(0.2);
 
     // double elapseTime = System.currentTimeMillis() - startTime;
     // if (elapseTime > 3000) {
@@ -158,8 +160,71 @@ public class Robot extends TimedRobot {
     // }
 
     lights.set(-0.99);
+    autoSelection("red");
 
   }
+
+  public void autoSelection(String color) {
+    double elapseTime = System.currentTimeMillis() - startTime;
+    // DriverStation.Alliance alliance = !DriverStation.getAlliance().isEmpty() ?
+    // DriverStation.getAlliance() : DriverStation.Alliance.Red;
+    Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Red);
+    System.out.println(alliance);
+    // int location = DriverStation.getLocation().orElse(0);
+    if (alliance == DriverStation.Alliance.Red) {
+      lights.set(-0.61);
+
+      if (elapseTime <= 2150) {
+        rightFrontMotor.set(0.2);
+        rightBackMotor.set(0.2);
+        leftFrontMotor.set(0.2);
+        leftBackMotor.set(0.2);
+      } else if (elapseTime > 3000 && elapseTime < 4770) {
+        rightFrontMotor.set(0.2);
+        rightBackMotor.set(0.2);
+        leftFrontMotor.set(-0.2);
+        leftBackMotor.set(-0.2);
+      } else if (elapseTime > 4780 && elapseTime < 5780) {
+        rightFrontMotor.set(0.2);
+        rightBackMotor.set(0.2);
+        leftFrontMotor.set(0.2);
+        leftBackMotor.set(0.2);
+      } else {
+        rightFrontMotor.set(0.0);
+        rightBackMotor.set(0.0);
+        leftFrontMotor.set(0.0);
+        leftBackMotor.set(0.0);
+      }
+    }
+  }
+//Strafing code
+    // if (alliance == DriverStation.Alliance.Blue) {
+    //   lights.set(-0.81);
+
+    //   rightFrontMotor.set(0.4);
+    //   rightBackMotor.set(-0.4);
+    //   leftFrontMotor.set(-0.4);
+    //   leftBackMotor.set(0.4);
+
+    //   if (elapseTime > 3000) {
+    //     rightFrontMotor.set(0);
+    //     rightBackMotor.set(0);
+    //     leftFrontMotor.set(0);
+    //     leftBackMotor.set(0);
+    //   }
+
+    
+
+    // rightFrontMotor.set(0.2);
+    // rightBackMotor.set(0.2);
+    // leftFrontMotor.set(0.2);
+    // leftBackMotor.set(0.2);
+    // Timer.delay(3);
+    // rightFrontMotor.set(0);
+    // rightBackMotor.set(0);
+    // leftFrontMotor.set(0);
+    // leftBackMotor.set(0);
+  
 
   @Override
   public void teleopInit() {
@@ -274,13 +339,44 @@ public class Robot extends TimedRobot {
     // Cancels all running commands at the start of test mode.
     // CommandScheduler.getInstance().cancelAll();
     System.out.println("testInit has been called.");
-
+    startTime = System.currentTimeMillis();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
     // System.out.println("testPeriodic has been called.");
+
+    double elapseTime = System.currentTimeMillis() - startTime;
+    // DriverStation.Alliance alliance = !DriverStation.getAlliance().isEmpty() ?
+    // DriverStation.getAlliance() : DriverStation.Alliance.Red;
+    Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Red);
+    // int location = DriverStation.getLocation().orElse(0);
+    if (alliance == DriverStation.Alliance.Red) {
+      lights.set(-0.61);
+
+      if (elapseTime <= 980) {
+        rightFrontMotor.set(-0.2);
+        rightBackMotor.set(-0.2);
+        leftFrontMotor.set(-0.2);
+        leftBackMotor.set(-0.2);
+      } else if (elapseTime > 1000 && elapseTime < 2760) {
+        rightFrontMotor.set(-0.2);
+        rightBackMotor.set(-0.2);
+        leftFrontMotor.set(0.2);
+        leftBackMotor.set(0.2);
+      } else if (elapseTime > 2770 && elapseTime < 4560) {
+        rightFrontMotor.set(-0.2);
+        rightBackMotor.set(-0.2);
+        leftFrontMotor.set(-0.2);
+        leftBackMotor.set(-0.2);
+      } else {
+        rightFrontMotor.set(0.0);
+        rightBackMotor.set(0.0);
+        leftFrontMotor.set(0.0);
+        leftBackMotor.set(0.0);
+      }
+    }
 
   }
 
