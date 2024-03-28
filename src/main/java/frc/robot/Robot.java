@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
   CANSparkMax leftClimber;
   CANSparkMax rightClimber;
   RelativeEncoder rightEncoder;
+  RelativeEncoder leftEncoder;
   double startTime;
   boolean alreadyFired;
   boolean retractedDumper;
@@ -413,13 +414,15 @@ public class Robot extends TimedRobot {
     boolean leftBumper = actionsController.getLeftBumper();
     boolean rightBumper = actionsController.getRightBumper();
     int dpad = actionsController.getPOV();
-
+    double rightEncoderPosition = rightEncoder.getPosition(); 
+    double leftEncoderPosition = leftEncoder.getPosition();
     double climberSpeed = 0.0;
 
     if (dpad > 135 && dpad < 225) {
       // neg speed
       System.out.println("Down!");
       climberSpeed = -0.5;
+
     } else if (dpad != -1) {
       if (dpad > 315 || dpad < 45) {
         // pos speed
@@ -429,12 +432,12 @@ public class Robot extends TimedRobot {
       climberSpeed = 0.0;
     }
 
-    if (leftBumper == true && rightBumper == true) {
-      leftClimber.set(climberSpeed);
+    if (leftBumper == true && rightBumper == true && rightEncoderPosition > 0 && rightEncoderPosition < 30 && leftEncoderPosition > 0 && leftEncoderPosition < 30) {
+      leftClimber.set(climberSpeed);  
       rightClimber.set(climberSpeed);
-    } else if (leftBumper == true) {
+    } else if (leftBumper == true && leftEncoderPosition > 0 && leftEncoderPosition < 30) {
       leftClimber.set(climberSpeed);
-    } else if (rightBumper == true) {
+    } else if (rightBumper == true rightEncoderPosition > 0 && rightEncoderPosition < 30) {
       rightClimber.set(climberSpeed);
     }
 
@@ -444,6 +447,7 @@ public class Robot extends TimedRobot {
     }
 
       System.out.println(rightEncoder.getPosition());
+      system.out.printLn(leftEncoder.getPosition());
   }
 
   public void activatePistons() {
