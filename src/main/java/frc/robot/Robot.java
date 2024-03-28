@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
   // Button.kY.value);
 
   // moves dumper up
-  JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
+  JoystickButton soleYellowButton = new JoystickButton(actionsController, Button.kY.value);
   // moves dumper down
   JoystickButton soleGreenButton = new JoystickButton(actionsController, Button.kA.value);
 
@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    CameraServer.startAutomaticCapture();
+    // CameraServer.startAutomaticCapture();
 
     m_robotContainer = new RobotContainer();
 
@@ -92,6 +92,13 @@ public class Robot extends TimedRobot {
     leftBackMotor = new CANSparkMax(5, MotorType.kBrushed);
     leftClimber = new CANSparkMax(6, MotorType.kBrushless);
     rightClimber = new CANSparkMax(7, MotorType.kBrushless);
+
+    rightBackMotor.restoreFactoryDefaults();
+    leftFrontMotor.restoreFactoryDefaults();
+    rightFrontMotor.restoreFactoryDefaults();
+    leftBackMotor.restoreFactoryDefaults();
+    leftClimber.restoreFactoryDefaults();
+    rightClimber.restoreFactoryDefaults();
 
     leftFrontMotor.setInverted(true);
     leftBackMotor.setInverted(true);
@@ -141,6 +148,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     startTime = System.currentTimeMillis();
     alreadyFired = false;
+    retractedDumper = false;
     System.out.println("autonomousInit has been called.");
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -167,7 +175,7 @@ public class Robot extends TimedRobot {
     // }
 
     lights.set(-0.99);
-    autoSelection("red");
+    autoSelection("Red");
 
   }
 
@@ -179,8 +187,11 @@ public class Robot extends TimedRobot {
     System.out.println(alliance);
     // int location = DriverStation.getLocation().orElse(0);
 
-    // autoQuickDrive(elapseTime, alliance, 0);
-    autoLongDrive(elapseTime, alliance, 8000);
+    autoQuickDrive(elapseTime, alliance, 0);
+    // testMe(elapseTime, alliance, 0);
+    // autoLongDrive(elapseTime, alliance, 8000);
+    // autoStrafeRed(elapseTime, alliance, 0);
+    // autoLongStrafeRed(elapseTime, alliance, 0);
   }
 
   public void autoQuickDrive(double elapseTime, Alliance alliance, int delayTime) {
@@ -237,28 +248,81 @@ public class Robot extends TimedRobot {
 
   }
 
-  // public void strafeRed(double elapseTime, Alliance alliance, int delayTime) {
-  // int driveStartTime = delayTime;
-  // int strafeEndTime = 2000 + driveStartTime;
-  // int driveForwardEndTime = strafeEndTime + 1000;
-  // int
+  public void autoStrafeRed(double elapseTime, Alliance alliance, int delayTime) {
+    int driveStartTime = delayTime;
+    int strafeEndTime = 2000 + driveStartTime;
+    int driveForwardEndTime = strafeEndTime + 1000;
+    int scoreEndTime = driveForwardEndTime + 1000;
+    int secondStrafeEndTime = scoreEndTime + 1000;
+    int thirdDriveEndTime = secondStrafeEndTime + 1000;
 
-  // if (elapseTime > driveStartTime && elapseTime < strafeEndTime) {
-  // rightFrontMotor.set(-0.4);
-  // rightBackMotor.set(0.4);
-  // leftFrontMotor.set(0.4);
-  // leftBackMotor.set(-0.4);
-  // else if (elapseTime > && elapseTime < ) {
-  // rightFrontMotor.set(speed:0.4);
-  // rightBackMotor.set(speed:0.2);
-  // leftFrontMotor.set(0.4);
-  // leftBackMotor.set(0.2);
-  // }
-  // else if (){
+    if (elapseTime > driveStartTime && elapseTime <= strafeEndTime) {
+      rightFrontMotor.set(-0.4);
+      rightBackMotor.set(0.4);
+      leftFrontMotor.set(0.4);
+      leftBackMotor.set(-0.4);
+    } else if (elapseTime > strafeEndTime && elapseTime < driveForwardEndTime) {
+      rightFrontMotor.set(0.2);
+      rightBackMotor.set(0.2);
+      leftFrontMotor.set(0.2);
+      leftBackMotor.set(0.2);
+    } else if (elapseTime > driveForwardEndTime && elapseTime < scoreEndTime) {
+      if (!alreadyFired) {
+        System.out.println("Dumper should fire");
+        m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+        alreadyFired = true;
+      }
+    } else if (elapseTime > scoreEndTime && elapseTime < secondStrafeEndTime) {
+      if (!retractedDumper) {
+        m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+        retractedDumper = true;
+      }
+    } else if (elapseTime > secondStrafeEndTime && elapseTime < thirdDriveEndTime) {
+      rightFrontMotor.set(-0.4);
+      rightBackMotor.set(0.4);
+      leftFrontMotor.set(0.4);
+      leftBackMotor.set(-0.4);
+    } else {
+      rightFrontMotor.set(0.0);
+      rightBackMotor.set(0.0);
+      leftFrontMotor.set(0.0);
+      leftBackMotor.set(0.0);
+    }
+  }
 
-  // }
-  // }
+  public void autoLongStrafeRed(double elapseTime, Alliance alliance, int delayTime) {
+    autoStrafeRed(elapseTime, alliance, delayTime);
+  }
 
+  public void testMe(double elapseTime, Alliance alliance, int delayTime) {
+    int driveStartTime = delayTime;
+    int strafeEndTime = 500 + driveStartTime;
+    int driveForwardEndTime = strafeEndTime + 500;
+    int scoreEndTime = driveForwardEndTime + 500;
+    lights.set(-0.81);
+
+    if (elapseTime > driveStartTime && elapseTime <= strafeEndTime) {
+      rightFrontMotor.set(-0.3);
+      rightBackMotor.set(0.2);
+      leftFrontMotor.set(0.2);
+      leftBackMotor.set(-0.3);
+    } else if (elapseTime > strafeEndTime && elapseTime <= driveForwardEndTime) {
+      rightFrontMotor.set(0.2);
+      rightBackMotor.set(0.2);
+      leftFrontMotor.set(0.2);
+      leftBackMotor.set(0.2);
+    } else if (elapseTime > driveForwardEndTime && elapseTime <= scoreEndTime) {
+      rightFrontMotor.set(-0.3);
+      rightBackMotor.set(0.2);
+      leftFrontMotor.set(0.2);
+      leftBackMotor.set(-0.3);
+    } else {
+      rightFrontMotor.set(0.0);
+      rightBackMotor.set(0.0);
+      leftFrontMotor.set(0.0);
+      leftBackMotor.set(0.0);
+    }
+  }
   // Strafing code
   // if (alliance == DriverStation.Alliance.Blue) {
   // lights.set(-0.81);
@@ -354,11 +418,12 @@ public class Robot extends TimedRobot {
 
     if (dpad > 135 && dpad < 225) {
       // neg speed
-      climberSpeed = -1;
+      System.out.println("Down!");
+      climberSpeed = -0.5;
     } else if (dpad != -1) {
       if (dpad > 315 || dpad < 45) {
         // pos speed
-        climberSpeed = 1;
+        climberSpeed = 0.5;
       }
     } else if (dpad == -1) {
       climberSpeed = 0.0;
@@ -370,10 +435,15 @@ public class Robot extends TimedRobot {
     } else if (leftBumper == true) {
       leftClimber.set(climberSpeed);
     } else if (rightBumper == true) {
-        rightClimber.set(climberSpeed);
+      rightClimber.set(climberSpeed);
     }
 
-    System.out.println(rightEncoder.getPosition());
+    else if (leftBumper == false || rightBumper == false) {
+      leftClimber.set(0);
+      rightClimber.set(0);
+    }
+
+      System.out.println(rightEncoder.getPosition());
   }
 
   public void activatePistons() {
