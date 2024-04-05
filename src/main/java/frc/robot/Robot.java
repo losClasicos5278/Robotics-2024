@@ -61,8 +61,8 @@ public class Robot extends TimedRobot {
   // JoystickButton soleGreenButton = new JoystickButton(controller,
   // Button.kA.value);
   //
-  JoystickButton leftTrigger = new JoystickButton(controller, Axis.kLeftTrigger.value);
-  JoystickButton rightTrigger = new JoystickButton(controller, Axis.kRightTrigger.value);
+  JoystickButton leftTrigger = new JoystickButton(actionsController, Axis.kLeftTrigger.value);
+  JoystickButton rightTrigger = new JoystickButton(actionsController, Axis.kRightTrigger.value);
 
   // If triggers are also pressed, this will allow climbers to move up and down
 
@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
   // moves dumper down
   JoystickButton soleGreenButton = new JoystickButton(controller, Button.kA.value);
 
-  JoystickButton soleRedButton = new JoystickButton(controller, Button.kB.value);
+  JoystickButton soleRedButton = new JoystickButton(actionsController, Button.kB.value);
   PIDController pid;
 
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 4, 5);
@@ -547,12 +547,12 @@ public class Robot extends TimedRobot {
 
   public void activateClimbers() {
     // climber code
-    boolean leftBumper = controller.getLeftBumper();
-    boolean rightBumper = controller.getRightBumper();
-    double leftTrigger = controller.getLeftTriggerAxis();
-    double rightTrigger = controller.getRightTriggerAxis();
+    boolean leftBumper = actionsController.getLeftBumper();
+    boolean rightBumper = actionsController.getRightBumper();
+    double leftTrigger = actionsController.getLeftTriggerAxis();
+    double rightTrigger = actionsController.getRightTriggerAxis();
 
-    int dpad = controller.getPOV();
+    int dpad = actionsController.getPOV();
 
     double rightEncoderPosition = rightEncoder.getPosition();
     double leftEncoderPosition = leftEncoder.getPosition();
@@ -604,11 +604,11 @@ public class Robot extends TimedRobot {
       rightClimber.set(0);
     }
 
-    if (controller.getBButton() == true && leftTrigger > 0) {
+    if (actionsController.getBButton() == true && leftTrigger > 0) {
       leftClimber.set(climberSpeed);
     }
 
-    if (controller.getBButton() == true && rightTrigger > 0) {
+    if (actionsController.getBButton() == true && rightTrigger > 0) {
       rightClimber.set(climberSpeed);
     }
 
