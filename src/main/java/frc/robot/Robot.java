@@ -69,9 +69,9 @@ public class Robot extends TimedRobot {
   // moves dumper up
   JoystickButton soleYellowButton = new JoystickButton(controller, Button.kY.value);
   // moves dumper down
-  JoystickButton soleGreenButton = new JoystickButton(controller, Button.kA.value);
+  JoystickButton soleGreenButton = new JoystickButton(actionsController, Button.kA.value);
 
-  JoystickButton soleRedButton = new JoystickButton(actionsController, Button.kB.value);
+  JoystickButton soleRedButton = new JoystickButton(controller, Button.kB.value);
   PIDController pid;
 
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 4, 5);
@@ -93,9 +93,9 @@ public class Robot extends TimedRobot {
     camera1 = CameraServer.startAutomaticCapture(0);
 
     camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    camera2 = CameraServer.startAutomaticCapture(1);
+    // camera2 = CameraServer.startAutomaticCapture(1);
 
-    camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    // camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
     m_robotContainer = new RobotContainer();
 
@@ -270,29 +270,28 @@ public class Robot extends TimedRobot {
     // int location = DriverStation.getLocation().orElse(0);
 
     autoQuickDrive(elapseTime, alliance, 0);
+    // autoLongDrive(elapseTime, alliance, 0);
     // testMe(elapseTime, alliance, 0);
-    // autoLongDrive(elapseTime, alliance, 8000);
     // autoStrafeRed(elapseTime, alliance, 0);
     // autoLongStrafeRed(elapseTime, alliance, 0);
   }
 
   public void autoQuickDrive(double elapseTime, Alliance alliance, int delayTime) {
     int driveStartTime = delayTime;
-    int driveForwardEndTime = 2150 + driveStartTime;
-    int turnEndTime = 1770 + driveForwardEndTime;
-    int secondDriveForwardEndTime = turnEndTime + 1000;
+    int driveForwardEndTime = 2130 + driveStartTime;
+    int turnEndTime = 1980 + driveForwardEndTime;
+    int secondDriveForwardEndTime = turnEndTime + 2000;
     int scoreEndTime = secondDriveForwardEndTime + 3000;
-    int retractedDumperEndTime = scoreEndTime + 2000;
-    int reverseDriveEndTime = retractedDumperEndTime + 2000;
-    int secondTurnEndTime = reverseDriveEndTime + 1770;
-    int fourthDriveEndTime = secondTurnEndTime + 1000;
+    int reverseDriveEndTime = scoreEndTime + 2000;
+    int secondTurnEndTime = reverseDriveEndTime + 1980;
+    int fourthDriveEndTime = secondTurnEndTime + 1500;
     lights.set(-0.61);
 
     if (elapseTime > driveStartTime && elapseTime <= driveForwardEndTime) {
-      rightFrontMotor.set(0.4);
-      rightBackMotor.set(0.4);
-      leftFrontMotor.set(0.4);
-      leftBackMotor.set(0.4);
+      rightFrontMotor.set(0.2);
+      rightBackMotor.set(0.2);
+      leftFrontMotor.set(0.2);
+      leftBackMotor.set(0.2);
     } else if (elapseTime > driveForwardEndTime && elapseTime < turnEndTime) {
       if (alliance == DriverStation.Alliance.Red) {
         rightFrontMotor.set(-0.2);
@@ -321,34 +320,28 @@ public class Robot extends TimedRobot {
         alreadyFired = true;
         System.out.println("Dumper should have dumped");
       }
-    } else if (elapseTime > scoreEndTime && elapseTime < retractedDumperEndTime) {
-      if (!retractedDumper) {
-        m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
-        retractedDumper = true;
-        System.out.println("Dumper should be retracted");
-      } else if (elapseTime > retractedDumperEndTime && elapseTime < reverseDriveEndTime) {
-        rightFrontMotor.set(-0.2);
-        rightBackMotor.set(-0.2);
+    }  else if (elapseTime > scoreEndTime && elapseTime < reverseDriveEndTime) {
+      rightFrontMotor.set(-0.1);
+      rightBackMotor.set(-0.1);
+      leftFrontMotor.set(-0.1);
+      leftBackMotor.set(-0.1);
+    } else if (elapseTime > reverseDriveEndTime && elapseTime < secondTurnEndTime) {
+      if (alliance == DriverStation.Alliance.Red) {
+        rightFrontMotor.set(0.2);
+        rightBackMotor.set(0.2);
         leftFrontMotor.set(-0.2);
         leftBackMotor.set(-0.2);
-      } else if (elapseTime > reverseDriveEndTime && elapseTime < secondTurnEndTime) {
-        if (alliance == DriverStation.Alliance.Red) {
-          rightFrontMotor.set(-0.2);
-          rightBackMotor.set(-0.2);
-          leftFrontMotor.set(0.2);
-          leftBackMotor.set(0.2);
-        } else if (alliance == DriverStation.Alliance.Blue) {
-          rightFrontMotor.set(0.2);
-          rightBackMotor.set(0.2);
-          leftFrontMotor.set(-0.2);
-          leftBackMotor.set(-0.2);
-        }
-      } else if (elapseTime > secondTurnEndTime && elapseTime < fourthDriveEndTime) {
-        rightFrontMotor.set(0.4);
-        rightBackMotor.set(0.4);
-        leftFrontMotor.set(0.4);
-        leftBackMotor.set(0.4);
+      } else if (alliance == DriverStation.Alliance.Blue) {
+        rightFrontMotor.set(-0.2);
+        rightBackMotor.set(-0.2);
+        leftFrontMotor.set(0.2);
+        leftBackMotor.set(0.2);
       }
+    } else if (elapseTime > secondTurnEndTime && elapseTime < fourthDriveEndTime) {
+      rightFrontMotor.set(0.2);
+      rightBackMotor.set(0.2);
+      leftFrontMotor.set(0.2);
+      leftBackMotor.set(0.2);
     } else {
       rightFrontMotor.set(0.0);
       rightBackMotor.set(0.0);
