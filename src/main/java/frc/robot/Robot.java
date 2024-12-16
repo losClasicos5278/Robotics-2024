@@ -2,6 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+//test comment for 2025 code
+
 package frc.robot;
 
 import com.revrobotics.CANSparkMax;
@@ -278,7 +280,7 @@ public class Robot extends TimedRobot {
 
   public void autoQuickDrive(double elapseTime, Alliance alliance, int delayTime) {
     int driveStartTime = delayTime;
-    int driveForwardEndTime = 2130 + driveStartTime;
+    int driveForwardEndTime = 2115 + driveStartTime;
     int turnEndTime = 1980 + driveForwardEndTime;
     int secondDriveForwardEndTime = turnEndTime + 2000;
     int scoreEndTime = secondDriveForwardEndTime + 3000;
@@ -529,9 +531,9 @@ public class Robot extends TimedRobot {
 
     System.out.println("position: " + Double.toString(position));
     System.out.println("climberSpeed: " + Double.toString(climberSpeed));
-    if (climberSpeed < 0 && position >= 0) {
+    if (climberSpeed < 0 && position > -230) {
       return true;
-    } else if (climberSpeed > 0 && position < 250) {
+    } else if (climberSpeed > 0 && position < 0) {
       return true;
     } else {
       return false;
@@ -540,12 +542,12 @@ public class Robot extends TimedRobot {
 
   public void activateClimbers() {
     // climber code
-    boolean leftBumper = actionsController.getLeftBumper();
-    boolean rightBumper = actionsController.getRightBumper();
-    double leftTrigger = actionsController.getLeftTriggerAxis();
-    double rightTrigger = actionsController.getRightTriggerAxis();
+    boolean leftBumper = controller.getLeftBumper();
+    boolean rightBumper = controller.getRightBumper();
+    double leftTrigger = controller.getLeftTriggerAxis();
+    double rightTrigger = controller.getRightTriggerAxis();
 
-    int dpad = actionsController.getPOV();
+    int dpad = controller.getPOV();
 
     double rightEncoderPosition = rightEncoder.getPosition();
     double leftEncoderPosition = leftEncoder.getPosition();
